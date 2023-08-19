@@ -1,0 +1,11 @@
+[package]
+name = "editor"
+version = "0.1.0"
+authors = ["Cristian Cristea <cristiancristea00@gmail.com>"]
+edition = "2021"
+
+[profile.release]
+lto = true
+
+[dependencies]
+termion = ">=2"
