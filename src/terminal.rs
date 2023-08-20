@@ -1,10 +1,12 @@
 use std::io;
 use std::io::{Error, Write};
 
-use crate::editor::Position;
+use termion::color;
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::{IntoRawMode, RawTerminal};
+
+use crate::editor::Position;
 
 pub struct Size {
     width: u16,
@@ -12,12 +14,10 @@ pub struct Size {
 }
 
 impl Size {
-    #[must_use]
     pub fn width(&self) -> u16 {
         self.width
     }
 
-    #[must_use]
     pub fn height(&self) -> u16 {
         self.height
     }
@@ -31,6 +31,8 @@ pub struct Terminal {
 impl Default for Terminal {
     fn default() -> Self {
         let (width, height) = termion::terminal_size().expect("Failed to get terminal size");
+
+        let height = height.saturating_sub(2);
 
         Self {
             size: Size { width, height },
@@ -51,6 +53,22 @@ impl Terminal {
 
     pub fn clear_current_line() {
         print!("{}", termion::clear::CurrentLine);
+    }
+
+    pub fn set_bg_colour(color: color::Rgb) {
+        print!("{}", color::Bg(color));
+    }
+
+    pub fn reset_bg_colour() {
+        print!("{}", color::Bg(color::Reset));
+    }
+
+    pub fn set_fg_colour(color: color::Rgb) {
+        print!("{}", color::Fg(color));
+    }
+
+    pub fn reset_fg_colour() {
+        print!("{}", color::Fg(color::Reset));
     }
 
     pub fn cursor_position(position: &Position) {
